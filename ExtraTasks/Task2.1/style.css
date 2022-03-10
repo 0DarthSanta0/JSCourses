@@ -1,0 +1,89 @@
+body {
+    background-color: gray;
+}
+
+.window {
+    background-color: white;
+    height: 220px;
+    width: 300px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+}
+
+.head {
+    height: 55px;
+    width: 300px;
+    top: 0;
+    position: absolute;
+}
+
+.line1 {
+    top: 55px;
+    height: 1px;
+    width: 300px;
+    position: absolute;
+    background-color: gray;
+}
+
+.text {
+    top: 56px;
+    height: 108px;
+    width: 300px;
+    position: absolute;
+}
+
+.text p {
+    margin: 10px;
+    word-wrap: break-word;
+}
+
+.line2 {
+    top: 164px;
+    height: 1px;
+    width: 300px;
+    position: absolute;
+    background-color: gray;
+}
+
+
+.buttons {
+    top: 165px;
+    height: 55px;
+    width: 300px;
+    position: absolute;
+}
+
+.b1, .b2 {
+    background-color: dimgray;
+    border: 0;
+    border-radius: 5px;
+    color: white;
+    padding: 5px;
+    position: absolute;
+    top: 20%;
+    left: 48%;
+}
+
+.b2 {
+
+    left: 65%;
+    background-color: blue;
+}
+
+h1 {
+    margin: 0;
+    font-size: 20px;
+    position: absolute;
+    top: 25%;
+    left: 5%;
+}
+
+img {
+    left: 90%;
+    top: 25%;
+    height: 20px;
+    position: absolute;
+}
