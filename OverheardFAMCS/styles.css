@@ -1,0 +1,432 @@
+:root
+{
+    --primary-color: #FF9719;
+    --secondary-color: #92D6F6;
+    --red-color: #FF5959;
+    --back-color: #F8F8F8;
+}
+
+html {
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+}
+
+@media screen and (max-width: 1439px) {
+    html {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    html {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    html {
+        font-size: 8px;
+    }
+}
+
+@media screen and (min-width: 1919px) {
+    html {
+        font-size: 20px;
+    }
+}
+
+@media screen and (min-width: 4095px) {
+    html {
+        font-size: 28px;
+    }
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 0;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+span {
+    color: blue;
+}
+
+p {margin: 0}
+
+header {
+    height: 5.7rem;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info {
+    flex: 1;
+    align-self: center;
+    justify-content: start;
+    align-items: center;
+    margin-left: 0.6rem;
+}
+
+.logo {
+    align-self: center;
+    height: 5.3rem;
+    flex: 1;
+}
+
+.exitButton {
+    flex: 1;
+    justify-content: end;
+}
+
+.exit {
+    height: 3rem;
+    margin-right: 0.5rem;
+}
+
+.avatar {
+    height: 5rem;
+    width: 5rem;
+    border-radius: 50%;
+    background-color: var(--back-color);
+}
+
+.nickname {
+    margin-left: 0.5rem;
+    font-size: 1.3rem;
+}
+
+main {
+    height: calc(100% - 11.4rem);
+}
+
+.mainContent {
+    flex: 3;
+}
+
+h2 {
+    font-size: 1.7rem;
+}
+
+.filters {
+    margin: 0.6rem 0.6rem 0.6rem 0;
+    border-radius: 2rem;
+    flex: 1;
+    background-color: var(--back-color);
+    align-items: center;
+    justify-content: space-between;
+}
+
+input {
+    border: 0;
+    background-color: white;
+    border-radius: 2rem;
+}
+
+.author {
+    justify-content: space-between;
+    background-color: white;
+    width: 22.1rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 2rem;
+}
+
+#authorField {
+    flex: 1;
+}
+
+.arrow {
+    margin-right: 1rem;
+}
+
+.divDate {
+    justify-content: space-between;
+    width: 22.1rem;
+    height: 2.5rem;
+}
+
+.dateStart, .dateEnd {
+    flex: 1;
+    background-color: white;
+    width: 10rem;
+    padding: 0.5rem 0.5rem;
+    font-size: 1rem;
+}
+
+.divDate input:first-of-type + input {
+    margin-left: 2.1rem;
+}
+
+.textField {
+    width: 22.1rem;
+    height: 14.4rem;
+    border-radius: 2rem;
+    background-color: white;
+}
+
+textarea {
+    resize: unset;
+    border: 0;
+}
+
+#textField {
+    margin: 1rem;
+    width: 20.1rem;
+    height: 12.4rem;
+}
+
+.hashtags {
+    margin-left: 1.8rem;
+    width: 23.4rem;
+    height: 2.5rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete {
+    margin-left: 0.2rem;
+    height: 1.1rem;
+}
+
+#hashtags {
+    flex: 1;
+    background-color: white;
+    width: 22.1rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 2rem;
+}
+
+.stackOfHashtags {
+    width: 22.1rem;
+    height: 2.5rem;
+    margin: 0;
+}
+
+.buttonCase {
+    justify-content: space-between;
+    width: 22.1rem;
+    height: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.resetButton, .applyButton {
+    height: 2.85rem;
+    width: 8.6rem;
+    font-size: 1.28rem;
+    color: white;
+}
+
+.resetButton {
+    background-color: var(--secondary-color);
+}
+
+.applyButton {
+    background-color: var(--primary-color);
+}
+
+.newTwit {
+    align-items: center;
+    background-color: var(--secondary-color);
+    height: 9.71rem;
+    border-radius: 2rem;
+    margin: 0.6rem;
+}
+
+.newTwit textarea {
+    height: 5.7rem;
+    width: 57.2rem;
+    margin-left: 1rem;
+    border-radius: 2rem;
+    padding: 1rem;
+}
+
+.newTwit div {
+    flex: 1;
+    justify-content: center;
+}
+
+.twitButton {
+    height: 2.85rem;
+    width: 8.6rem;
+    font-size: 1.28rem;
+    color: white;
+    background-color: var(--primary-color);
+}
+
+.mainContent > p, .twitContent > p {
+    margin: 0;
+    align-self: center;
+    color: var(--secondary-color);
+    font-size: 1.28rem;
+}
+
+.twits {
+    height: calc(100% - 18rem);
+    overflow-y: scroll;
+    margin: 0.6rem;
+}
+
+.twit {
+    margin-bottom: 0.6rem;
+    height: 9.7rem;
+    background-color: var(--back-color);
+    border-radius: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.userInfo {
+    width: 10.2rem;
+    margin: 0 1rem;
+    align-items: center;
+    justify-content: start;
+}
+
+.twitText {
+    background-color: white;
+    border-radius: 2rem;
+    height: 7.71rem;
+    width: 54rem;
+}
+
+.twitText > p {
+    margin: 1rem;
+}
+
+.twitComments {
+    margin-left: 2rem;
+    margin-top: 1.57rem;
+    align-self: start;
+}
+
+.twitComments > div {
+    flex: 1;
+}
+
+.editTools img:first-of-type + img {
+    margin-left: 0.7rem;
+}
+
+.twitComments img {
+    height: 1.5rem;
+}
+
+.twitComments p {
+    font-size: 1.28rem;
+    margin-left: 0.7rem;
+}
+
+.loadMoreTwits {
+    align-self: center;
+    margin: 1.5rem;
+}
+
+.loadButton {
+    border-radius: 2rem;
+    background-color: var(--secondary-color);
+    width: 27.5rem;
+    height: 2.85rem;
+    font-size: 1.2rem;
+    color: white;
+}
+
+footer {
+    align-items: center;
+    justify-content: space-between;
+    height: 5.7rem;
+    width: 100%;
+    background-color: #E5E5E5;
+}
+
+footer > p {
+    transform: translate(-50%, -0%);
+    font-size: 1.5rem;
+}
+
+
+
+
+
+.commentHead {
+    margin: 0.6rem;
+}
+
+.homeButton {
+    border: 0;
+    margin: 0 1.5rem;
+    align-self: start;
+    background-color: var(--primary-color);
+    border-radius: 2rem;
+    height: 3.43rem;
+    width: 9.36rem;
+}
+
+.homeButton > p {
+    font-size: 1.28rem;
+    color: white;
+    text-align: center;
+}
+
+.selectedTwit {
+    height: 7.7rem;
+    flex: 1;
+    margin: 0;
+}
+
+.selectedTwit .twitText {
+    width: 66.3rem  ;
+    height: 5.3rem;
+}
+
+.comment {
+        height: 6rem;
+}
+
+.comment .twitText {
+    height: 4.28rem;
+    width: 82.6rem;
+}
+
+.comment .userInfo {
+    width: 15.2rem;
+}
+
+.twitUserInfo {
+    text-align: center;
+    margin-left: 1rem;
+}
+
+.newComment {
+    background-color: var(--back-color);
+    height: 5.57rem;
+}
+
+.newComment textarea {
+    height: 1.64rem;
+    width: 72.5rem;
+
+}
+
+.commentButton {
+    padding: 0;
+    height: 3.2rem;
+    width: 16.5rem;
+    font-size: 1.28rem;
+    color: white;
+    background-color: var(--primary-color);
+}
