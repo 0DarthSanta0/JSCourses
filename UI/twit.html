@@ -9,7 +9,7 @@
 <header class="row">
     <div class="info row">
         <img class="avatar" src="img/myAva.svg" alt="avatar">
-        <div class="nickname">Darth_Santa</div>
+        <div class="nickname" id="nickname"></div>
     </div>
     <img src = "img/Logo.svg" alt="logo" class="logo">
     <div class="exitButton row">
@@ -21,137 +21,11 @@
         <button class="homeButton">
             <p>Home</p>
         </button>
-        <div class = "selectedTwit twit row">
-            <div class="userInfo column">
-                <img src="img/myAva.svg" alt="avatar">
-                <p>@Darth_Santa</p>
-                <p>12.12.2012 11:11</p>
-            </div>
-            <div class="twitText">
-                <p>Пожалуйста прокоментируйте, хочу набить 666 коментов</p>
-            </div>
-            <div class="twitComments column">
-                <div class="row">
-                    <img src="img/comment.svg" alt="comment">
-                    <p>666</p>
-                </div>
-                <div class="editTools row">
-                    <img src="img/edit.svg" alt="edit">
-                    <img src="img/deleteTwit.svg" alt="delete">
-                </div>
-            </div>
+        <div class = "selectedTwit twit row" id="selectedTweet">
         </div>
     </div>
     <p>Comments</p>
-    <div class="comments twits">
-        <div class = "comment twit row">
-            <div class="userInfo row">
-                <img src="img/ava.svg" alt="avatar">
-                <div class="twitUserInfo column">
-                    <p>@UnknownUser123</p>
-                    <p>12.12.2012 22:22</p>
-                </div>
-            </div>
-            <div class="twitText">
-                <p>Текс комента который кто-то когда-то написал (а может быть <span>#котик</span> походил по ноуту) </p>
-            </div>
-        </div>
-        <div class = "comment twit row">
-            <div class="userInfo row">
-                <img src="img/ava.svg" alt="avatar">
-                <div class="twitUserInfo column">
-                    <p>@UnknownUser123</p>
-                    <p>12.12.2012 22:22</p>
-                </div>
-            </div>
-            <div class="twitText">
-                <p>Текс комента который кто-то когда-то написал (а может быть <span>#котик</span> походил по ноуту) </p>
-            </div>
-        </div>
-        <div class = "comment twit row">
-            <div class="userInfo row">
-                <img src="img/ava.svg" alt="avatar">
-                <div class="twitUserInfo column">
-                    <p>@UnknownUser123</p>
-                    <p>12.12.2012 22:22</p>
-                </div>
-            </div>
-            <div class="twitText">
-                <p>Текс комента который кто-то когда-то написал (а может быть <span>#котик</span> походил по ноуту) </p>
-            </div>
-        </div>
-        <div class = "comment twit row">
-            <div class="userInfo row">
-                <img src="img/ava.svg" alt="avatar">
-                <div class="twitUserInfo column">
-                    <p>@UnknownUser123</p>
-                    <p>12.12.2012 22:22</p>
-                </div>
-            </div>
-            <div class="twitText">
-                <p>Текс комента который кто-то когда-то написал (а может быть <span>#котик</span> походил по ноуту) </p>
-            </div>
-        </div>
-        <div class = "comment twit row">
-            <div class="userInfo row">
-                <img src="img/ava.svg" alt="avatar">
-                <div class="twitUserInfo column">
-                    <p>@UnknownUser123</p>
-                    <p>12.12.2012 22:22</p>
-                </div>
-            </div>
-            <div class="twitText">
-                <p>Текс комента который кто-то когда-то написал (а может быть <span>#котик</span> походил по ноуту) </p>
-            </div>
-        </div>
-        <div class = "comment twit row">
-            <div class="userInfo row">
-                <img src="img/ava.svg" alt="avatar">
-                <div class="twitUserInfo column">
-                    <p>@UnknownUser123</p>
-                    <p>12.12.2012 22:22</p>
-                </div>
-            </div>
-            <div class="twitText">
-                <p>Текс комента который кто-то когда-то написал (а может быть <span>#котик</span> походил по ноуту) </p>
-            </div>
-        </div>
-        <div class = "comment twit row">
-            <div class="userInfo row">
-                <img src="img/ava.svg" alt="avatar">
-                <div class="twitUserInfo column">
-                    <p>@UnknownUser123</p>
-                    <p>12.12.2012 22:22</p>
-                </div>
-            </div>
-            <div class="twitText">
-                <p>Текс комента который кто-то когда-то написал (а может быть <span>#котик</span> походил по ноуту) </p>
-            </div>
-        </div>
-        <div class = "comment twit row">
-            <div class="userInfo row">
-                <img src="img/ava.svg" alt="avatar">
-                <div class="twitUserInfo column">
-                    <p>@UnknownUser123</p>
-                    <p>12.12.2012 22:22</p>
-                </div>
-            </div>
-            <div class="twitText">
-                <p>Текс комента который кто-то когда-то написал (а может быть <span>#котик</span> походил по ноуту) </p>
-            </div>
-        </div>
-        <div class = "comment twit row">
-            <div class="userInfo row">
-                <img src="img/ava.svg" alt="avatar">
-                <div class="twitUserInfo column">
-                    <p>@UnknownUser123</p>
-                    <p>12.12.2012 22:22</p>
-                </div>
-            </div>
-            <div class="twitText">
-                <p>Текс комента который кто-то когда-то написал (а может быть <span>#котик</span> походил по ноуту) </p>
-            </div>
-        </div>
+    <div class="comments twits" id="tweetComments">
     </div>
     <form class = "newComment newTwit row">
         <textarea></textarea>
@@ -170,5 +44,6 @@
     <p></p>
 </footer>
 </body>
+<script src="JS/script.js"></script>
 </html>
 
