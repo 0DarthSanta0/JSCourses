@@ -34,7 +34,7 @@ class Tweet {
 
   static validate(tw) {
     if (!(tw instanceof Tweet)) return false;
-    if ((tw.id === undefined) || (tw.id === null) || (tw.text === undefined) || (tw.text === null) || (tw.createdAt === undefined) || (tw.createdAt === null) || (tw.author === undefined) || (tw.author === null) || (tw.comments === undefined)) {
+    if ((tw.id === undefined) || (tw.id === '') || (tw.text === undefined) || (tw.text === '') || (tw.createdAt === undefined) || (tw.createdAt === '') || (tw.author === undefined) || (tw.author === '') || (tw.comments === undefined)) {
       return false;
     }
     return tw.text.length <= 280;
@@ -72,7 +72,7 @@ class Comment {
 
   static validate(com) {
     if (!(com instanceof Comment)) return false;
-    if ((com.id === undefined) || (com.id === null) || (com.text === undefined) || (com.text === null) || (com.createdAt === undefined) || (com.createdAt === null) || (com.author === undefined) || (com.author === null)) {
+    if ((com.id === undefined) || (com.id === '') || (com.text === undefined) || (com.text === '') || (com.createdAt === undefined) || (com.createdAt === '') || (com.author === undefined) || (com.author === '')) {
       return false;
     }
     return com.text.length <= 280;
@@ -197,78 +197,158 @@ class TweetCollection {
   }
 }
 
-console.log('Создание твитов');
 const tweet1 = new Tweet('Some text #text #me', 'Darth_Santa');
 const tweet2 = new Tweet('Some nonsense #invaLId3ehashtag55s #text', 'Darth_Santa');
 const tweet3 = new Tweet('Some text #rrr teeeeext', 'UnknownUser1');
 const tweet4 = new Tweet('teeeeext', 'Darth_Santa');
-const tweet5 = new Tweet('teeeeext', 'UnknownUser1');
-const tweet6 = new Tweet('teeeee', 'UnknownUser1');
-const tweet7 = new Tweet('tee', 'UnknownUser2');
-const badTweet8 = new Tweet();
-const mas = [tweet1, tweet2, tweet3, tweet4];
-const mas2 = [tweet5, tweet6, tweet7, badTweet8];
-console.log(mas);
-console.log('Создание коллекции');
-const coll = new TweetCollection(mas);
-coll.user = 'Darth_Santa';
-console.log(coll.getPage(0, 10));
-console.log('Добавить твиты из массива и вернуть невалидные');
-console.log(coll.addAll(mas2));
-console.log(coll.getPage(0, 10));
-console.log('Вывести три последних добавленных');
-console.log(coll.getPage(0, 3));
-console.log('Фильтр по всем критериям');
-console.log(coll.getPage(0, 2, {
-  author: 'Darth_Santa', dateTo: new Date('2023-03-01T23:00:00'), dateFrom: new Date('2011-07-01T23:00:00'), hashtags: ['#text', '#me'], text: 'Some',
-}));
-console.log('Фильтр по автору и дате (таких твитов нет)');
-console.log(coll.getPage(0, 10, { author: 'UnknownUser1', dateTo: new Date('2022-03-01T23:00:00') }));
-console.log('Фильтр по двум хештегам (оба есть)');
-console.log(coll.getPage(0, 10, { hashtags: ['#text', '#me'] }));
-console.log('Фильтр по двум хештегам (одного нет)');
-console.log(coll.getPage(0, 10, { hashtags: ['#text', '#jfhjuhf'] }));
-console.log('Фильтр по двум хештегам (один не валиден. в таком случае я считал, что не валидных хештегов просто нет в списке передающихся)');
-console.log(coll.getPage(0, 10, { hashtags: ['#text', '#jKDjifjiM#juhf'] }));
-console.log('Твит с id 101');
-console.log(coll.get('101'));
-console.log('Проверить твит из coll');
-console.log(Tweet.validate(tweet1));
-console.log('Проверить твит с недостающими параметрами');
-const badTweet = new Tweet();
-console.log(Tweet.validate(badTweet));
-console.log('Добавить твит');
-console.log(coll.add('new tweeeeet'));
-console.log('Добавить твит с текстом большим за 280 символов');
-console.log(coll.add('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'));
-console.log(coll.getPage(0, 10));
-console.log('Изменить твит (успешно)');
-console.log(coll.edit('104', 'EDITED tweet'));
-console.log('Изменить твит (больше за 280 символов)');
-console.log(coll.edit('101', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'));
-console.log('Удалить твит (author != user)');
-console.log(coll.remove('103'));
-console.log('Удалить твит с несуществующим id');
-console.log(coll.remove('2222'));
-console.log('Удалить твит (author == user)');
-console.log(coll.remove('102'));
-coll.user = 'Pavel';
-console.log(coll.getPage(0, 10));
-console.log('Добавить твит уже с другим именем пользователя');
-console.log(coll.add('From Pavel'));
-console.log('Проверить комментарий (валидно))');
-const comment1 = new Comment('jnvhfjvf', 'user74');
-console.log(Comment.validate(comment1));
-console.log('Проверить комментарий с недостающими параметрами');
-const badComment = new Comment();
-console.log(Comment.validate(badComment));
-console.log('Добавить коммент');
-console.log(coll.addComment('101', 'arararrararararrarrrrrrr'));
-console.log('Добавить коммент несуществующему твиту');
-console.log(coll.addComment('222', 'arararrararararrarrrrrrr'));
-console.log('Добавить коммент c текстом > 280 символов');
-console.log(coll.addComment('101', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'));
-console.log(coll.getPage(0, 10));
-coll.clear();
-console.log('Очистить');
-console.log(coll.getPage(0, 10));
+const tweets = new TweetCollection([tweet1, tweet2, tweet3, tweet4]);
+
+class HeaderView {
+  _div;
+
+  constructor(elementId) {
+    this._div = document.getElementById(elementId);
+  }
+
+  display() {
+    this._div.innerHTML = tweets.user;
+  }
+}
+
+class TweetFeedView {
+  _div;
+
+  constructor(elementId) {
+    this._div = document.getElementById(elementId);
+  }
+
+  display(skip = 0, top = 10, config = undefined) {
+    const arr = tweets.getPage(skip, top, config);
+    let temp = '';
+    for (let i = 0; i < arr.length; i++) {
+      temp += `<div class = "twit row">
+                    <div class="userInfo column">
+                        <img src="../img/ava.svg" alt="avatar">
+                        <p>${arr[i].author}</p>
+                        <p>${arr[i].createdAt.getDay()}.${arr[i].createdAt.getMonth()}.${arr[i].createdAt.getFullYear()} ${arr[i].createdAt.getHours()}:${arr[i].createdAt.getMinutes()} </p>
+                    </div>
+                    <div class="twitText">
+                        <p>${arr[i].text}</p>
+                    </div>
+                    <div class="twitComments row">
+                        <img src="../img/comment.svg" alt="comment">
+                        <p>${arr[i].comments.length}</p>
+                    </div>
+                </div>`;
+    }
+    this._div.innerHTML = temp;
+  }
+}
+
+class FilterView {
+  _div;
+
+  constructor(elementId) {
+    this._div = document.getElementById(elementId);
+  }
+}
+
+class TweetView {
+  _divTweet;
+
+  _divComments;
+
+  constructor(firstElementId, secondElementId) {
+    this._divTweet = document.getElementById(firstElementId);
+    this._divComments = document.getElementById(secondElementId);
+  }
+
+  display(id) {
+    const tw = tweets.get(id);
+    const temp1 = `<div class="userInfo column">
+                <img src="../img/myAva.svg" alt="avatar">
+                <p>${tw.author}</p>
+                <p>${tw.createdAt.getDay()}.${tw.createdAt.getMonth()}.${tw.createdAt.getFullYear()} ${tw.createdAt.getHours()}:${tw.createdAt.getMinutes()}</p>
+            </div>
+            <div class="twitText">
+                <p>${tw.text}</p>
+            </div>
+            <div class="twitComments column">
+                <div class="row">
+                    <img src="../img/comment.svg" alt="comment">
+                    <p>${tw.comments.length}</p>
+                </div>
+                <div class="editTools row">
+                    <img src="../img/edit.svg" alt="edit">
+                    <img src="../img/deleteTwit.svg" alt="delete">
+                </div>
+            </div>`;
+    let temp2 = '';
+    const arr = tw.comments;
+    for (let i = 0; i < arr.length; i++) {
+      temp2 += `
+        <div class = "comment twit row">
+            <div class="userInfo row">
+                <img src="../img/ava.svg" alt="avatar">
+                <div class="twitUserInfo column">
+                    <p>${arr[i].author}</p>
+                        <p>${arr[i].createdAt.getDay()}.${arr[i].createdAt.getMonth()}.${arr[i].createdAt.getFullYear()} ${arr[i].createdAt.getHours()}:${arr[i].createdAt.getMinutes()} </p>
+                </div>
+            </div>
+            <div class="twitText">
+                <p>${arr[i].text}</p>
+            </div>
+        </div>`;
+    }
+    this._divTweet.innerHTML = temp1;
+    this._divComments.innerHTML = temp2;
+  }
+}
+
+const headerView = new HeaderView('nickname');
+const tweetFeedView = new TweetFeedView('tweets');
+const filterView = new FilterView('filters');
+const tweetView = new TweetView('selectedTweet', 'tweetComments');
+
+function setCurrentUser(tempUser) {
+  tweets.user = tempUser;
+  headerView.display();
+}
+
+function addTweet(tweetText) {
+  tweets.add(tweetText);
+  tweetFeedView.display();
+}
+
+function editTweet(id, text) {
+  tweets.edit(id, text);
+  tweetFeedView.display();
+}
+
+function removeTweet(id) {
+  tweets.remove(id);
+  tweetFeedView.display();
+}
+
+function getFeed(skip, top, filterConfig) {
+  tweetFeedView.display(skip, top, filterConfig);
+}
+
+function showTweet(id) {
+  if (tweets.get(id) !== undefined) tweetView.display(id);
+}
+
+// мне не хватило времени перенести всё по отдельным файлам, поэтому тесты для main.html и twit.html конфликтуют между собой. Я распределил их по блокам, просьба закоментировать один, прежде чем запускать другой. Скоро этот недочёт будет исправлен
+
+setCurrentUser('pavel');
+console.log(tweets.addComment('101', 'arararrararararrarrrrrrr'));
+getFeed(0, 4);
+addTweet('Newwwww tweet1');
+removeTweet('105');
+addTweet('Newwwww tweet2');
+editTweet('106', 'text edited');
+
+// setCurrentUser('pavel');
+// console.log(tweets.addComment('101', 'arararrararararrarrrrrrr'));
+// console.log(tweets.addComment('101', 'arararrararararrarrrrrrr'));
+// showTweet('101');

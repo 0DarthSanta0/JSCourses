@@ -14,5 +14,6 @@ module.exports = {
         "max-len": "off",
         "no-restricted-syntax": "off",
         "max-classes-per-file": "off",
+        "no-unused-vars": "off",
     }
 }
