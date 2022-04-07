@@ -203,6 +203,10 @@ const tweet3 = new Tweet('Some text #rrr teeeeext', 'UnknownUser1');
 const tweet4 = new Tweet('teeeeext', 'Darth_Santa');
 const tweets = new TweetCollection([tweet1, tweet2, tweet3, tweet4]);
 
+function getFullDate(date) {
+  return `${date.getDay()}.${date.getMonth()}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+}
+
 class HeaderView {
   _div;
 
@@ -210,8 +214,17 @@ class HeaderView {
     this._div = document.getElementById(elementId);
   }
 
-  display() {
-    this._div.innerHTML = tweets.user;
+  display(user) {
+    this._div.innerHTML = `
+        <div class="info row" id="userInfo">
+            <img class="avatar" src="img/myAva.svg" alt="avatar">
+            <div class="nickname" id="nickname">${user}</div>
+        </div>
+        <img src = "img/Logo.svg" alt="logo" class="logo">
+        <div class="exitButton row">
+            <img src = "img/exit.svg" alt="exit" class="exit">
+        </div>
+    `;
   }
 }
 
@@ -222,15 +235,14 @@ class TweetFeedView {
     this._div = document.getElementById(elementId);
   }
 
-  display(skip = 0, top = 10, config = undefined) {
-    const arr = tweets.getPage(skip, top, config);
+  display(arr = {}) {
     let temp = '';
     for (let i = 0; i < arr.length; i++) {
       temp += `<div class = "twit row">
                     <div class="userInfo column">
                         <img src="../img/ava.svg" alt="avatar">
                         <p>${arr[i].author}</p>
-                        <p>${arr[i].createdAt.getDay()}.${arr[i].createdAt.getMonth()}.${arr[i].createdAt.getFullYear()} ${arr[i].createdAt.getHours()}:${arr[i].createdAt.getMinutes()} </p>
+                        <p>${getFullDate(arr[i].createdAt)}</p>
                     </div>
                     <div class="twitText">
                         <p>${arr[i].text}</p>
@@ -251,48 +263,91 @@ class FilterView {
   constructor(elementId) {
     this._div = document.getElementById(elementId);
   }
+
+  display() {
+    this._div.innerHTML = `
+        <h2>Filters</h2>
+            <label for="authorField">Author</label>
+            <div class="author row">
+                <input type="text" id="authorField">
+            </div>
+            <p>Date of</p>
+            <div class="divDate row">
+                <input type="date" class="dateStart">
+                <input type="date" class="dateEnd">
+            </div>
+            <label for="textField">Text</label>
+            <div class="textField">
+                <textarea id="textField"></textarea>
+            </div>
+            <label for="hashtags">Hashtags</label>
+            <div class="hashtags row">
+                <input type="text" id="hashtags">
+                <img src = "img/delete.svg" alt="delete" class="delete">
+            </div>
+            <p class="stackOfHashtags"></p>
+            <div class="buttonCase row">
+                <input type="button" class="resetButton" value="Reset">
+                <input type="button" class="applyButton" value="Apply">
+            </div>
+    `;
+  }
 }
 
 class TweetView {
-  _divTweet;
+  _div;
 
-  _divComments;
-
-  constructor(firstElementId, secondElementId) {
-    this._divTweet = document.getElementById(firstElementId);
-    this._divComments = document.getElementById(secondElementId);
+  constructor(elementId) {
+    this._div = document.getElementById(elementId);
   }
 
-  display(id) {
-    const tw = tweets.get(id);
-    const temp1 = `<div class="userInfo column">
-                <img src="../img/myAva.svg" alt="avatar">
-                <p>${tw.author}</p>
-                <p>${tw.createdAt.getDay()}.${tw.createdAt.getMonth()}.${tw.createdAt.getFullYear()} ${tw.createdAt.getHours()}:${tw.createdAt.getMinutes()}</p>
-            </div>
-            <div class="twitText">
-                <p>${tw.text}</p>
-            </div>
-            <div class="twitComments column">
-                <div class="row">
-                    <img src="../img/comment.svg" alt="comment">
-                    <p>${tw.comments.length}</p>
-                </div>
-                <div class="editTools row">
-                    <img src="../img/edit.svg" alt="edit">
-                    <img src="../img/deleteTwit.svg" alt="delete">
-                </div>
-            </div>`;
-    let temp2 = '';
+  display(tw) {
+    this._div.setAttribute('class', 'twitContent column');
+    let temp = `
+    <div class="commentHead row">
+        <button class="homeButton">
+            <p>Home</p>
+        </button>
+        <div class = "selectedTwit twit row" id="selectedTweet">
+          <div class="userInfo column">
+                  <img src="../img/myAva.svg" alt="avatar">
+                  <p>${tw.author}</p>
+                  <p>${getFullDate(tw.createdAt)}</p>
+          </div>
+          <div class="twitText">
+             <p>${tw.text}</p>
+          </div>
+          <div class="twitComments column">
+             <div class="row">
+                 <img src="../img/comment.svg" alt="comment">
+                      <p>${tw.comments.length}</p>
+             </div>
+             <div class="editTools row">
+                 <img src="../img/edit.svg" alt="edit">
+                 <img src="../img/deleteTwit.svg" alt="delete">
+             </div>
+          </div>
+        </div>
+    </div>
+    <p>Comments</p>
+    <div class="comments twits" id="tweetComments">`;
+    const end = `</div>
+    <form class = "newComment newTwit row">
+        <textarea></textarea>
+        <div class="row">
+            <input type="button" value="Send!" class="commentButton">
+        </div>
+    </form>`;
+    let temp1 = '';
     const arr = tw.comments;
     for (let i = 0; i < arr.length; i++) {
-      temp2 += `
+      temp1 += `
         <div class = "comment twit row">
             <div class="userInfo row">
                 <img src="../img/ava.svg" alt="avatar">
                 <div class="twitUserInfo column">
                     <p>${arr[i].author}</p>
-                        <p>${arr[i].createdAt.getDay()}.${arr[i].createdAt.getMonth()}.${arr[i].createdAt.getFullYear()} ${arr[i].createdAt.getHours()}:${arr[i].createdAt.getMinutes()} </p>
+                        <p>${getFullDate(arr[i].createdAt)} </p>
                 </div>
             </div>
             <div class="twitText">
@@ -300,45 +355,48 @@ class TweetView {
             </div>
         </div>`;
     }
-    this._divTweet.innerHTML = temp1;
-    this._divComments.innerHTML = temp2;
+    temp = temp + temp1 + end;
+    this._div.innerHTML = temp;
   }
 }
 
-const headerView = new HeaderView('nickname');
+const headerView = new HeaderView('header');
 const tweetFeedView = new TweetFeedView('tweets');
 const filterView = new FilterView('filters');
-const tweetView = new TweetView('selectedTweet', 'tweetComments');
+const tweetView = new TweetView('main');
 
 function setCurrentUser(tempUser) {
   tweets.user = tempUser;
-  headerView.display();
+  headerView.display(tempUser);
 }
 
 function addTweet(tweetText) {
   tweets.add(tweetText);
-  tweetFeedView.display();
+  const arr = tweets.getPage(0, 10);
+  tweetFeedView.display(arr);
 }
 
 function editTweet(id, text) {
   tweets.edit(id, text);
-  tweetFeedView.display();
+  const arr = tweets.getPage(0, 10);
+  tweetFeedView.display(arr);
 }
 
 function removeTweet(id) {
   tweets.remove(id);
-  tweetFeedView.display();
+  const arr = tweets.getPage(0, 10);
+  tweetFeedView.display(arr);
 }
 
-function getFeed(skip, top, filterConfig) {
-  tweetFeedView.display(skip, top, filterConfig);
+function getFeed(skip = 0, top = 10, filterConfig = undefined) {
+  const arr = tweets.getPage(skip, top, filterConfig);
+  tweetFeedView.display(arr);
 }
 
 function showTweet(id) {
-  if (tweets.get(id) !== undefined) tweetView.display(id);
+  const tw = tweets.get(id);
+  if (tw !== undefined) tweetView.display(tw);
 }
-
-// мне не хватило времени перенести всё по отдельным файлам, поэтому тесты для main.html и twit.html конфликтуют между собой. Я распределил их по блокам, просьба закоментировать один, прежде чем запускать другой. Скоро этот недочёт будет исправлен
 
 setCurrentUser('pavel');
 console.log(tweets.addComment('101', 'arararrararararrarrrrrrr'));
@@ -347,8 +405,4 @@ addTweet('Newwwww tweet1');
 removeTweet('105');
 addTweet('Newwwww tweet2');
 editTweet('106', 'text edited');
-
-// setCurrentUser('pavel');
-// console.log(tweets.addComment('101', 'arararrararararrarrrrrrr'));
-// console.log(tweets.addComment('101', 'arararrararararrarrrrrrr'));
-// showTweet('101');
+filterView.display();
