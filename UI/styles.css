@@ -30,6 +30,7 @@ html {
     }
 }
 
+
 @media screen and (min-width: 1919px) {
     html {
         font-size: 20px;
@@ -71,6 +72,12 @@ header {
     width: 100%;
     justify-content: space-between;
     align-items: center;
+}
+
+button {
+    padding: 0;
+    border: 0;
+    border-radius: 2rem;
 }
 
 .info {
@@ -257,7 +264,7 @@ textarea {
 
 .newTwit div {
     flex: 1;
-    justify-content: center;
+    justify-content: space-around;
 }
 
 .twitButton {
@@ -318,7 +325,7 @@ textarea {
     flex: 1;
 }
 
-.editTools img:first-of-type + img {
+.deleteButton {
     margin-left: 0.7rem;
 }
 
@@ -429,4 +436,57 @@ footer > p {
     font-size: 1.28rem;
     color: white;
     background-color: var(--primary-color);
+}
+
+.countOfComments, .editButton, .deleteButton {
+    border: 0;
+    padding: 0;
+    background-color: var(--back-color);
+}
+
+.confirmEdit, .resetEdit {
+    height: 2.6rem;
+    width: 7.0rem;
+    font-size: 1.28rem;
+    color: white;
+    background-color: var(--primary-color);
+}
+
+.resetEdit {
+    background-color: var(--red-color);
+}
+
+.deleted {
+    margin: 0 1rem;
+    padding-top: 1rem;
+    align-self: center;
+    border-radius: 1rem;
+    background-color: white;
+    align-items: center;
+    justify-content: space-between;
+    height: 5rem;
+    width: 6.8rem;
+    color: var(--red-color);
+}
+
+.deleteButtonCase {
+    flex-direction: row;
+}
+
+.confirmDelete, .resetDelete {
+    border: 0;
+    padding: 0;
+    border-radius: 2rem;
+    color: white;
+    height: 1.8rem;
+    width: 3rem;
+}
+
+.confirmDelete {
+    margin-left: 0.2rem;
+    background-color: var(--red-color);
+}
+
+.resetDelete {
+    background-color: var(--secondary-color);
 }

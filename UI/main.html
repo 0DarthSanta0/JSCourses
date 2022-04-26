@@ -7,23 +7,55 @@
 </head>
 <body>
     <header class="row" id="header">
+        <div class="info row" id="userInfo">
+            <img class="avatar" src="img/myAva.svg" alt="avatar">
+            <div class="nickname" id="nickname">${user}</div>
+        </div>
+        <img src = "img/Logo.svg" alt="logo" class="logo">
+        <div class="exitButton row">
+            <img src = "img/exit.svg" alt="exit" class="exit">
+        </div>
     </header>
     <main class="row" id="main">
         <div class="mainContent column">
-            <form class = "newTwit row">
-                <textarea></textarea>
-                <div class="row">
-                    <input type="button" value="Twit!" class="twitButton">
+            <form class = "newTwit row" id="newTweet">
+                <textarea id="newTweetArea"></textarea>
+                <div class="row" id="newTweetButtonCase">
+                    <button class="twitButton">Tweet!</button>
                 </div>
             </form>
             <p>Recent twits</p>
             <div class="twits" id="tweets">
             </div>
             <form class="loadMoreTwits">
-                <input type="button" value="Load more twits" class="loadButton">
+                <input type="button" value="Load more twits" class="loadButton" id="loadButton">
             </form>
         </div>
         <form class="filters column" id="filters">
+            <h2>Filters</h2>
+            <label for="authorField">Author</label>
+            <div class="author row">
+                <input type="text" id="authorField">
+            </div>
+            <p>Date of</p>
+            <div class="divDate row">
+                <input type="date" class="dateStart">
+                <input type="date" class="dateEnd">
+            </div>
+            <label for="textField">Text</label>
+            <div class="textField">
+                <textarea id="textField"></textarea>
+            </div>
+            <label for="hashtags">Hashtags</label>
+            <div class="hashtags row">
+                <input type="text" id="hashtags">
+                <img src = "img/delete.svg" alt="delete" class="delete">
+            </div>
+            <p class="stackOfHashtags"></p>
+            <div class="buttonCase row">
+                <input type="button" class="resetButton" value="Reset">
+                <input type="button" class="applyButton" value="Apply">
+            </div>
         </form>
     </main>
     <footer class="row">

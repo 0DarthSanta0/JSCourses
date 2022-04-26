@@ -9,11 +9,12 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
-        "no-underscore-dangle": ["error", { "allowAfterThis": true }],
-        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+        "no-underscore-dangle": "off",
+        "no-plusplus": "off",
         "max-len": "off",
         "no-restricted-syntax": "off",
         "max-classes-per-file": "off",
         "no-unused-vars": "off",
+        "class-methods-use-this": "off",
     }
 }
