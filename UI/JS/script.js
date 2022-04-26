@@ -1,5 +1,14 @@
 let nextId = 100;
 let nextCommentId = 100;
+let indexOfLoadTweets = 20;
+
+class UserCollection {
+  _users = [];
+
+  addUser(user) {
+    this._users.push(user);
+  }
+}
 
 class Tweet {
   _id;
@@ -93,6 +102,7 @@ class TweetCollection {
   }
 
   constructor(arrayOfTweets) {
+    if (arrayOfTweets === undefined) return;
     for (let i = 0; i < arrayOfTweets.length; ++i) {
       if (Tweet.validate(arrayOfTweets[i])) {
         this._tweets.set(arrayOfTweets[i].id, arrayOfTweets[i]);
@@ -197,12 +207,6 @@ class TweetCollection {
   }
 }
 
-const tweet1 = new Tweet('Some text #text #me', 'Darth_Santa');
-const tweet2 = new Tweet('Some nonsense #invaLId3ehashtag55s #text', 'Darth_Santa');
-const tweet3 = new Tweet('Some text #rrr teeeeext', 'UnknownUser1');
-const tweet4 = new Tweet('teeeeext', 'Darth_Santa');
-const tweets = new TweetCollection([tweet1, tweet2, tweet3, tweet4]);
-
 function getFullDate(date) {
   return `${date.getDay()}.${date.getMonth()}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
 }
@@ -235,23 +239,36 @@ class TweetFeedView {
     this._div = document.getElementById(elementId);
   }
 
-  display(arr = {}) {
+  display(user, arr = {}) {
     let temp = '';
     for (let i = 0; i < arr.length; i++) {
-      temp += `<div class = "twit row">
+      temp += `<div class = "twit row" id="${arr[i].id}">
                     <div class="userInfo column">
                         <img src="../img/ava.svg" alt="avatar">
                         <p>${arr[i].author}</p>
                         <p>${getFullDate(arr[i].createdAt)}</p>
                     </div>
-                    <div class="twitText">
+                    <div class="twitText">  
                         <p>${arr[i].text}</p>
-                    </div>
-                    <div class="twitComments row">
-                        <img src="../img/comment.svg" alt="comment">
+                    </div>`;
+      if (user !== arr[i].author) {
+        temp += `   <div class="twitComments row">
+                        <button class="countOfComments"><img src="../img/comment.svg" alt="comment"></button>
                         <p>${arr[i].comments.length}</p>
                     </div>
                 </div>`;
+      } else {
+        temp += `   <div class="twitComments column">
+                        <div class="row">
+                            <button class="countOfComments"><img src="../img/comment.svg" alt="comment"></button>
+                            <p>${arr[i].comments.length}</p>
+                        </div>
+                        <div class="editTools row">
+                            <button class="editButton"><img src="../img/edit.svg" alt="edit"></button>
+                            <button class="deleteButton"><img src="../img/deleteTwit.svg" alt="delete"></button>
+                        </div>
+                    </div></div>`;
+      }
     }
     this._div.innerHTML = temp;
   }
@@ -301,7 +318,7 @@ class TweetView {
     this._div = document.getElementById(elementId);
   }
 
-  display(tw) {
+  display(user, tw) {
     this._div.setAttribute('class', 'twitContent column');
     let temp = `
     <div class="commentHead row">
@@ -316,8 +333,9 @@ class TweetView {
           </div>
           <div class="twitText">
              <p>${tw.text}</p>
-          </div>
-          <div class="twitComments column">
+          </div>`;
+    if (user === tw.author) {
+      temp += `<div class="twitComments column">
              <div class="row">
                  <img src="../img/comment.svg" alt="comment">
                       <p>${tw.comments.length}</p>
@@ -326,7 +344,15 @@ class TweetView {
                  <img src="../img/edit.svg" alt="edit">
                  <img src="../img/deleteTwit.svg" alt="delete">
              </div>
-          </div>
+          </div>`;
+    } else {
+      temp += `<div class="twitComments row">
+                        <img src="../img/comment.svg" alt="comment">
+                        <p>${tw.comments.length}</p>
+                    </div>
+                </div>`;
+    }
+    temp += `
         </div>
     </div>
     <p>Comments</p>
@@ -360,49 +386,209 @@ class TweetView {
   }
 }
 
-const headerView = new HeaderView('header');
-const tweetFeedView = new TweetFeedView('tweets');
-const filterView = new FilterView('filters');
-const tweetView = new TweetView('main');
+class TweetFeedApiService {
+  _requestMethods = {
+    post: 'POST',
+    get: 'GET',
+  };
 
-function setCurrentUser(tempUser) {
-  tweets.user = tempUser;
-  headerView.display(tempUser);
+  _endpoints = {
+    login: 'login',
+    tweet: 'tweet',
+    registration: 'registration',
+  };
+
+  _endpoint = 'https://jslabapi.datamola.com/';
+
+  constructor(url) {
+    this._endpoint = url;
+  }
+
+  _getHeaders(isAuth) {
+    const defaultHeaders = new Headers();
+    defaultHeaders.append('Content-Type', 'application/json');
+    if (isAuth) {
+      defaultHeaders.append('Authorization', `Bearer ${localStorage.token}`);
+    }
+    return defaultHeaders;
+  }
+
+  _getOptions(body, isAuth, method = this._requestMethods.post) {
+    const defaultOptions = {
+      method,
+      headers: this._getHeaders(isAuth),
+    };
+    if (body) {
+      defaultOptions.body = JSON.stringify(body);
+    }
+    return defaultOptions;
+  }
+
+  _request(url, options) {
+    return fetch(this._endpoint + url, options)
+      .then((response) => response.json());
+  }
+
+  _registrationRequest = (login, password) => {
+    const options = this._getOptions({ login, password });
+    return this._request(this._endpoints.registration, options);
+  };
+
+  async registration(login, password) {
+    const temp = await this._registrationRequest(login, password);
+    console.log(temp);
+  }
+
+  _loginRequest = (login, password) => {
+    const options = this._getOptions({ login, password });
+    return this._request(this._endpoints.login, options)
+      .then(({ token }) => token);
+  };
+
+  async login(login, password) {
+    localStorage.token = await this._loginRequest(login, password);
+  }
+
+  _tweetRequest = (text) => {
+    const option = this._getOptions({ text }, true);
+    return this._request(this._endpoints.tweet, option);
+  };
+
+  async addTweet(text) {
+    const tw = await this._tweetRequest(text);
+    console.log(tw);
+  }
+
+  _tweetsRequest = (from, count, filters) => {
+    const option = this._getOptions(undefined, false, 'GET');
+    return this._request(this._endpoints.tweet, option);
+  };
+
+  async getTweets() {
+    const tw = await this._tweetsRequest();
+    console.log(tw);
+    return tw;
+  }
 }
 
-function addTweet(tweetText) {
-  tweets.add(tweetText);
-  const arr = tweets.getPage(0, 10);
-  tweetFeedView.display(arr);
+class TweetsController {
+  headerView;
+
+  tweetFeedView;
+
+  filterView;
+
+  tweetView;
+
+  tweets = new TweetCollection();
+
+  currentUser;
+
+  users = new UserCollection();
+
+  api = new TweetFeedApiService('https://jslabapi.datamola.com/');
+
+  constructor(headerId, tweetsId, filtersId, mainId) {
+    this.headerView = new HeaderView(headerId);
+    this.tweetFeedView = new TweetFeedView(tweetsId);
+    this.filterView = new FilterView(filtersId);
+    this.tweetView = new TweetView(mainId);
+    window.addEventListener('load', () => {
+      const button = document.getElementById('loadButton');
+      button.addEventListener('click', () => {
+        this.getFeed(0, indexOfLoadTweets);
+        indexOfLoadTweets += 10;
+      });
+      const tw = document.getElementById('tweets');
+      tw.addEventListener('click', (e) => {
+        const target = e.target.parentNode;
+        if (target.classList.contains('countOfComments')) {
+          if (target.parentNode.classList.contains('twitComment')) {
+            this.showTweet(target.parentNode.parentNode.id);
+          }
+          this.showTweet(target.parentNode.parentNode.parentNode.id);
+        }
+        if (target.classList.contains('editButton')) {
+          target.parentNode.parentNode.parentNode.style = 'opacity: 0.4';
+          const newTweetButtonCase = document.getElementById('newTweetButtonCase');
+          newTweetButtonCase.innerHTML = `<button class="confirmEdit">Save</button>
+                    <button class="resetEdit">Cancel</button>`;
+          newTweetButtonCase.addEventListener('click', (event) => {
+            const secondTarget = event.target;
+            const text = document.getElementById('newTweetArea').value;
+            if (secondTarget.classList.contains('confirmEdit')) {
+              this.editTweet(target.parentNode.parentNode.parentNode.id, `${text}`);
+              document.getElementById('newTweet').innerHTML = `<textarea id="newTweetArea"></textarea>
+                <div class="row" id="newTweetButtonCase">
+                    <input type="button" value="Tweet!" class="twitButton">
+                </div>`;
+            }
+          });
+        }
+        if (target.classList.contains('deleteButton')) {
+          const secondTarget = target.parentNode.parentNode;
+          secondTarget.classList.add('deleted');
+          const temp = secondTarget.getElementsByTagName('p')[0];
+          secondTarget.innerHTML = `<p>Delete?</p>
+                        <div class="row" class="deleteButtonCase">
+                            <button class="resetDelete">No</button>
+                            <button class="confirmDelete">Yes</button>
+                        </div>`;
+          secondTarget.addEventListener('click', (event) => {
+            if (event.target.classList.contains('confirmDelete')) {
+              this.removeTweet(secondTarget.parentNode.id);
+            }
+            if (event.target.classList.contains('resetDelete')) {
+              this.getFeed(0, indexOfLoadTweets);
+            }
+          });
+        }
+      });
+      const newTw = document.getElementById('newTweet');
+      newTw.addEventListener('click', (e) => {
+        if (e.target.classList.contains('twitButton')) {
+          const text = document.getElementById('newTweetArea').value;
+          this.addTweet(text);
+          this.getFeed(0, indexOfLoadTweets);
+        }
+      });
+    });
+  }
+
+  setCurrentUser(tempUser) {
+    this.tweets.user = tempUser;
+    this.headerView.display(tempUser);
+  }
+
+  addTweet(tweetText) {
+    this.tweets.add(tweetText);
+    const arr = this.tweets.getPage(0, 10);
+    this.tweetFeedView.display(this.tweets.user, arr);
+  }
+
+  editTweet(id, text) {
+    this.tweets.edit(id, text);
+    const arr = this.tweets.getPage(0, 10);
+    this.tweetFeedView.display(this.tweets.user, arr);
+  }
+
+  removeTweet(id) {
+    this.tweets.remove(id);
+    const arr = this.tweets.getPage(0, 10);
+    this.tweetFeedView.display(this.tweets.user, arr);
+  }
+
+  getFeed(skip = 0, top = 10, filterConfig = undefined) {
+    const arr = this.api.getTweets();
+    this.tweetFeedView.display(this.tweets.user, arr);
+  }
+
+  showTweet(id) {
+    const tw = this.tweets.get(id);
+    if (tw !== undefined) this.tweetView.display(this.tweets.user, tw);
+  }
 }
 
-function editTweet(id, text) {
-  tweets.edit(id, text);
-  const arr = tweets.getPage(0, 10);
-  tweetFeedView.display(arr);
-}
+const tweetsController = new TweetsController('header', 'tweets', 'filters', 'main');
 
-function removeTweet(id) {
-  tweets.remove(id);
-  const arr = tweets.getPage(0, 10);
-  tweetFeedView.display(arr);
-}
-
-function getFeed(skip = 0, top = 10, filterConfig = undefined) {
-  const arr = tweets.getPage(skip, top, filterConfig);
-  tweetFeedView.display(arr);
-}
-
-function showTweet(id) {
-  const tw = tweets.get(id);
-  if (tw !== undefined) tweetView.display(tw);
-}
-
-setCurrentUser('pavel');
-console.log(tweets.addComment('101', 'arararrararararrarrrrrrr'));
-getFeed(0, 4);
-addTweet('Newwwww tweet1');
-removeTweet('105');
-addTweet('Newwwww tweet2');
-editTweet('106', 'text edited');
-filterView.display();
+tweetsController.setCurrentUser('pavel');
